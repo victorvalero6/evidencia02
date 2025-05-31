@@ -26,7 +26,7 @@
 
 ;;Lista doble nombre-valor 
 
-(define listaValorItems
+(define listaValorItems 
     (hash
         "granulated sugar" 200
         "flour" 120
@@ -64,4 +64,13 @@
         "new york strip steak" 454
         "vegetable oil" 220
         "garlic clove" 5
-        "fresh rosemary"))
+        "fresh rosemary" 1))
+
+;;Funcion Gramos a Tazas 
+;;dividir el total de gramos por taza entre los gramos que se presentan
+;;(/ gramos-total gramos-por-taza)
+
+
+;;Funcion de Tazas a Gramos
+;;Si el archivo dice dos tazas, * valor numeroDeTazas
+;;(* número-de-tazas gramos-por-taza)

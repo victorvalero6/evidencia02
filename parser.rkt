@@ -1,6 +1,8 @@
 #lang racket
 (require racket/list)
 (provide parse-recipe)
+(provide parsear-linea)
+
 
 (define (dropf pred lst)
   (cond
@@ -27,3 +29,12 @@
     (takef (lambda (l) (not (string=? l "Instructions:" ))) (cdr ingredientes)))
 
   solo-instrucciones)
+
+  ;;String split - aqui separamos por espacio las palabras
+(define (string-split str)
+    (regexp-split #rx" " str))
+
+(define (parsear-linea linea)
+    (define tokens (string-split linea))
+    (write tokens))
+

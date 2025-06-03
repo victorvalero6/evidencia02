@@ -1,10 +1,19 @@
 #lang racket
 (require racket/list)
+(require racket/string)
 (provide parse-recipe)
+(provide parse-recipe-instructions)
+(require "unidades.rkt")
+
+(define (string-blank? s)
+  (string=? (string-trim s) ""))
 (provide parsear-cantidad)
 (provide parsear-unidad)
 (provide parsear-ingrediente)
 (provide linea-completa)
+(provide convertir-temperaturas)
+
+
 
 
 (define (dropf pred lst)
@@ -19,7 +28,6 @@
     [(pred (car lst)) (cons (car lst) (takef pred (cdr lst)))]
     [else '()]))
 
-
 (define (parse-recipe archivo)
   (define in (open-input-file archivo))
   (define lineas (sequence->list (in-lines in)))
@@ -31,10 +39,17 @@
   (define solo-instrucciones
     (takef (lambda (l) (not (string=? l "Instructions:" ))) (cdr ingredientes)))
 
-  solo-instrucciones)
+  (define solo-lineas-validas
+    (filter (lambda (l) (not (string-blank? l))) solo-instrucciones))
+
+  (define lineas-procesadas
+    (map linea-completa solo-lineas-validas))
+
+  lineas-procesadas)
+
 
 ;;----CANTIDAD
-;;funcion para transformar los casos "1/2" "1" "1 1/2" y 
+;;funcion para transformar los casos "1/2" "1" "1 1/2" y
 (define (parsear-cantidad linea)
   (define tokens (string-split linea))
   (cond
@@ -112,8 +127,38 @@
 
 ;;------[LINEA COMPLETA]
 (define(linea-completa linea)
-    (define tokens(string-split linea))
-    (define cantidad(parsear-cantidad linea))
-    (define unidad(parsear-unidad linea))
-    (define ingredientes(parsear-ingrediente linea))
-    (list cantidad unidad ingredientes))
+  (define tokens(string-split linea))
+  (define cantidad(parsear-cantidad linea))
+  (define unidad(parsear-unidad linea))
+  (define ingredientes(parsear-ingrediente linea))
+  (list cantidad unidad ingredientes))
+
+;----INSTRUCCIONES READ
+
+(define (parse-recipe-instructions archivo1)
+  (define in (open-input-file archivo1))
+  (define lineas (sequence->list (in-lines in)))
+  (close-input-port in)
+
+  (define instrucciones
+    (cdr(dropf (lambda (l) (not (string=? l "Instructions:"))) lineas)))
+
+  instrucciones)
+
+(define (convertir-temperaturas texto)
+  ;; Definimos 350°F
+  (define regex #px"([0-9]+)°F")
+  (if (regexp-match regex texto)
+      (let* (
+             [match (regexp-match regex texto)]
+             [f (string->number (second match))]
+             [c (fahrenheit f)]
+             [c-redondeado (round (* c 10))]
+             [c-final (/ c-redondeado 10.0)]
+             [nuevo-texto (regexp-replace regex texto
+                                          (format "~a°F (~a°C)" f c-final))])
+        ;; Retornamos el texto con la temperatura convertida
+        nuevo-texto)
+
+      ;; Si no hay coincidencia, simplemente regresamos el texto original
+      texto))

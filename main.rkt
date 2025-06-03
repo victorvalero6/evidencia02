@@ -15,3 +15,6 @@
 
 (displayln(parsear-cantidad "2 3/4 cups sugar"))
 (displayln(parsear-unidad "2 3/4 cups sugar"))
+(displayln(parsear-ingrediente "2 3/4 cups granulated sugar"))
+(displayln(linea-completa "2 3/4 cups granulated sugar"))
+

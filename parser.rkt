@@ -3,6 +3,8 @@
 (provide parse-recipe)
 (provide parsear-cantidad)
 (provide parsear-unidad)
+(provide parsear-ingrediente)
+(provide linea-completa)
 
 
 (define (dropf pred lst)
@@ -31,10 +33,7 @@
 
   solo-instrucciones)
 
-  ;;String split - aqui separamos por espacio las palabras
-(define (string-split str)
-    (regexp-split #rx" " str))
-
+;;----CANTIDAD
 ;;funcion para transformar los casos "1/2" "1" "1 1/2" y 
 (define (parsear-cantidad linea)
   (define tokens (string-split linea))
@@ -65,19 +64,56 @@
     [else
      (error "Formato no reconocido en la línea" linea)]))
 
-(define(parsear-unidad linea)
-  (define tokens(string->number linea))
-  (cons
-    [(and(=(length tokens)1)
-        (regexp-match? #rx"^a-z+$" (first tokens)))]
-  
-  ;;Me gustaria que la funcion encuentre todos los elementos strings de la linea, que el car lo tome 
-  ;;y lo defina como el de unidad y el resto cdr que sea definido como el ingrediente
-  
-  
-  
-  
-  
-  
-  
-  ))
+;;---------UNIDAD
+(define (parsear-unidad linea)
+  (define tokens (string-split linea))
+  (cond
+    ;; caso "1 1/2 unidad"
+    [(and (>= (length tokens) 3)
+          (regexp-match? #rx"^[0-9]+$" (first tokens))
+          (regexp-match? #rx"^[0-9]+/[0-9]+$" (second tokens)))
+     (list-ref tokens 2)]
+
+    ;; caso solo fraccion "1/2 unidad"
+    [(and (>= (length tokens) 2)
+          (regexp-match? #rx"^[0-9]+/[0-9]+$" (first tokens)))
+     (list-ref tokens 1)]
+
+    ;; caso solo entero "2 unidad"
+    [(and (>= (length tokens) 2)
+          (regexp-match? #rx"^[0-9]+$" (first tokens)))
+     (list-ref tokens 1)]
+
+    [else
+     (error "No hay suficientes elementos o formato no reconocido en la línea" linea)]))
+
+;;---------INGREDIENTE
+(define (parsear-ingrediente linea)
+  (define tokens (string-split linea))
+  (cond
+    ;; caso "1 1/2 unidad"
+    [(and (>= (length tokens) 4)
+          (regexp-match? #rx"^[0-9]+$" (first tokens))
+          (regexp-match? #rx"^[0-9]+/[0-9]+$" (second tokens)))
+     (list-tail tokens 3)]
+
+    ;; caso solo fraccion "1/2 unidad"
+    [(and (>= (length tokens) 3)
+          (regexp-match? #rx"^[0-9]+/[0-9]+$" (first tokens)))
+     (list-tail tokens 2)]
+
+    ;; caso solo entero "2 unidad"
+    [(and (>= (length tokens) 3)
+          (regexp-match? #rx"^[0-9]+$" (first tokens)))
+     (list-tail tokens 2)]
+
+    [else
+     (error "No hay suficientes elementos o formato no reconocido en la línea" linea)]))
+
+;;------[LINEA COMPLETA]
+(define(linea-completa linea)
+    (define tokens(string-split linea))
+    (define cantidad(parsear-cantidad linea))
+    (define unidad(parsear-unidad linea))
+    (define ingredientes(parsear-ingrediente linea))
+    (list cantidad unidad ingredientes))

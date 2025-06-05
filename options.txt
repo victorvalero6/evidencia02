@@ -1,3 +1,4 @@
-scaling 2
-filter sugar
-show-calories true
+sistema: Metric
+temp: F
+porciones: 3
+filtra: cocoa

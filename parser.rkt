@@ -158,7 +158,7 @@
              [c-redondeado (round (* c 10))]
              [c-final (/ c-redondeado 10.0)]
              [nuevo-texto (regexp-replace regex texto
-                                          (format "~a°F (~a°C)" f c-final))])
+                                          (format "~a°C" c-final))])
         ;; Retornamos el texto con la temperatura convertida
         nuevo-texto)
 
@@ -188,16 +188,16 @@
 
 ;LEER OPTIONS.TXT
 
-(define (parser-optionstxt archivo)
-  (define in(open-input-file archivo))
-  (define linea(sequence->list (in-lines in)))
+(define (parser-optionstxt path)
+  (define in (open-input-file path))
+  (define lines (sequence->list (in-lines in)))
   (close-input-port in)
+  (map (lambda (line)
+         (define parts (string-split line ":"))
+         (cons (string-trim (string-downcase (first parts)))
+               (string-trim (second parts))))
+       lines))
 
-  (map (lambda (linea)
-         (define partes(string-split linea))
-         (cons (string-downcase (first partes))
-               (second partes)))
-       linea))
 
 
 

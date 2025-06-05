@@ -204,9 +204,11 @@
   (filter
    (lambda (linea)
      (define ingrediente (third linea))
-     (define contiene? (member palabra ingrediente))
-     (if incluir?
-         contiene?
-         (not contiene?)))
+     (define nombre (string-join ingrediente " "))
+     (define contiene? (string-contains? (string-downcase nombre)
+                                         (string-downcase palabra))) ; match parcial
+     (if incluir? contiene? (not contiene?)))
    receta))
+
+
 

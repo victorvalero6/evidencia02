@@ -13,6 +13,7 @@
 (provide linea-completa)
 (provide convertir-temperaturas)
 (provide parse-recipe-porciones)
+(provide parser-optionstxt)
 
 
 
@@ -165,8 +166,8 @@
       texto))
 
 ;;------Porciones READ
-(define (parse-recipe-porciones archivo)
-  (define in (open-input-file archivo))
+(define (parse-recipe-porciones archivo2)
+  (define in (open-input-file archivo2))
   (define lineas (sequence->list (in-lines in)))
   (close-input-port in)
 
@@ -184,6 +185,19 @@
         (if numPorciones
             numPorciones
             (error "No se pudo convertir el número de porciones")))))
+
+;LEER OPTIONS.TXT
+
+(define (parser-optionstxt archivo)
+  (define in(open-input-file archivo))
+  (define linea(sequence->list (in-lines in)))
+  (close-input-port in)
+
+  (map (lambda (linea)
+         (define partes(string-split linea))
+         (cons (string-downcase (first partes))
+               (second partes)))
+       linea))
 
 
 

@@ -1,6 +1,5 @@
 #lang racket
 
-
 (provide fahrenheit)
 (provide celcius)
 (provide listaValorItems)
@@ -10,6 +9,9 @@
 (provide listaCaloriasItem)
 (provide CaloriasIngrediente)
 (provide calorias-por-porcion)
+(provide escalar-linea)
+(provide escalar-receta)
+(provide filtrar-receta)
 ;; definicion de constantes F a C
 (define F->C 0.55555)
 (define C->F 1.8)
@@ -181,3 +183,30 @@
 (define (calorias-por-porcion receta porcion)
   (define total(calorias-totales receta))
   (/ total porcion))
+
+
+;ESCALAR PORCION "FACTOR"
+
+(define (escalar-linea factor linea)
+  (define cantidad(first linea))
+  (define unidad(second linea))
+  (define ingrediente(third linea))
+  (list(* factor cantidad)unidad ingrediente))
+
+(define(escalar-receta receta factor)
+  (map(lambda(linea)
+        (escalar-linea(factor linea)))
+      receta))
+
+;FILTRAR INGREDIENTES
+
+(define (filtrar-receta receta palabra incluir?)
+  (filter
+   (lambda (linea)
+     (define ingrediente (third linea))
+     (define contiene? (member palabra ingrediente))
+     (if incluir?
+         contiene?
+         (not contiene?)))
+   receta))
+

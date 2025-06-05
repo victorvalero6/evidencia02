@@ -65,6 +65,11 @@
 (define calorias-porcion (calorias-por-porcion receta porciones))
 (displayln (string-append "Calorías por porción (" (number->string porciones) "): " (number->string calorias-porcion)))
 
+
+(newline)
+(displayln "-----")
+(newline)
+
 (newline)
 (displayln "Calorías por ingrediente:")
 (for-each
@@ -74,7 +79,27 @@
    (define gramos (t->gr cantidad unidad ingrediente))
    (define calorias100g (hash-ref listaCaloriasItem nombre 0))
    (define calorias (CaloriasIngrediente calorias100g gramos))
-   (displayln (list nombre calorias)))
+   (displayln (list nombre calorias "Cal")))
  receta)
 
+(newline)
+(displayln "-----")
+(newline)
 
+
+(define receta-escalada (map (lambda (linea) (escalar-linea 2 linea)) receta))
+
+(for-each displayln receta-escalada)
+(newline)
+(displayln "-----")
+(newline)
+
+(define nueva-receta (filtrar-receta receta "sugar" #t))
+(for-each displayln nueva-receta)
+
+(newline)
+(displayln "-----")
+(newline)
+
+(define options(parser-optionstxt "/Users/victorvalero/Desktop/code📂/evidencia02/options.txt"))
+(display options)

@@ -1,28 +1,26 @@
 #lang racket
 
+
 (provide fahrenheit)
 (provide celcius)
 (provide listaValorItems)
 (provide gr->t)
 (provide t->gr)
-
-
+(provide calorias-totales)
+(provide listaCaloriasItem)
+(provide CaloriasIngrediente)
+(provide calorias-por-porcion)
 ;; definicion de constantes F a C
-
 (define F->C 0.55555)
-
 (define C->F 1.8)
-
 (define tempint 32)
 
 ;; Funciones F a C & Viceversa
-
 (define (fahrenheit f)
   (* (- f tempint) F->C))
 
 (define (celcius c)
   (+ (* c C->F) 32))
-
 
 ;;Conversiones de gramos a tazas
 ;;Debemos bucar una estructura de datos
@@ -30,7 +28,6 @@
 ;;Con eso podriamos empezar la transformacion de gramos a taza o de taza a gramos
 
 ;;Lista doble nombre-valor
-
 (define listaValorItems
   (hash
    "granulated sugar" 200
@@ -118,3 +115,69 @@
 
     [else
      cantidad]))
+
+;; CALORIAS POR PORCION - POR 100G -> CALORIAS
+
+(define listaCaloriasItem
+  (hash
+   "granulated sugar" 387
+   "flour" 364
+   "cocoa powder, sifted" 228
+   "powdered sugar, sifted" 389
+   "dark chocolate chips" 546
+   "sea salt" 0
+   "large egg" 143
+   "canola oil" 884
+   "water" 0
+   "vanilla" 228
+   "extra-virgin olive oil" 884
+   "white wine vinegar" 17
+   "minced garlic" 149
+   "dried oregano" 265
+   "red pepper flakes" 318
+   "smoked paprika" 282
+   "fresh parsley" 36
+   "dry fettuccine pasta" 371
+   "butter" 717
+   "heavy cream" 340
+   "salt" 0
+   "black pepper" 251
+   "garlic salt" 0
+   "grated romano cheese" 387
+   "grated parmesan cheese" 431
+   "all-purpose flour" 364
+   "almond flour" 571
+   "baking powder" 53
+   "kosher salt" 0
+   "extra-virgin olive oil" 884
+   "grabulated sugar" 387
+   "fresh lemon juice" 22
+   "lemon zest" 47
+   "new york strip steak" 454
+   "vegetable oil" 884
+   "garlic clove" 149
+   "fresh rosemary" 131))
+
+;formula calorias poe ingrediente
+(define (CaloriasIngrediente calorias100g gramos)
+  (/ (* calorias100g gramos)100))
+
+;funcion calorias totales
+(define(calorias-totales lista-receta)
+  (foldl
+   (lambda (linea suma)
+     (define-values(cantidad unidad ingrediente) (apply values linea))
+     (define nombre(string-join ingrediente " "))
+     (define gramos(t->gr cantidad unidad ingrediente))
+     (define cantidad100g(hash-ref listaCaloriasItem nombre 0))
+     (define calorias(CaloriasIngrediente cantidad100g gramos))
+     (define sumaRound(+ suma calorias))
+     (/ (round (* sumaRound 100.0)) 100.0))
+   0
+   lista-receta))
+
+;calorias por porcion
+
+(define (calorias-por-porcion receta porcion)
+  (define total(calorias-totales receta))
+  (/ total porcion))

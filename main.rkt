@@ -2,18 +2,15 @@
 (require "unidades.rkt")
 (require "parser.rkt")
 
-
-;(displayln (fahrenheit 89)) ; prueba F to C
-;(displayln (celcius 33)) ; prueba C to F
-;(displayln listaValorItems)
-;(displayln (hash-ref listaValorItems "fresh rosemary"))
-;(displayln listaValorItems)
-
+;se define "receta"
 (define receta (parse-recipe "/Users/victorvalero/Desktop/code📂/evidencia02/data/Best Homemade Brownies-1.txt"))
 (for-each displayln receta)
 
+(newline)
 (displayln "-----")
+(newline)
 
+;funciones gr a t y t a gr
 (for-each
  (lambda (linea)
    (define cantidad (first linea))
@@ -25,7 +22,9 @@
    (displayln (list conversion 'cups ingrediente)))
  receta)
 
+(newline)
 (displayln "-----")
+(newline)
 
 (for-each
  (lambda (linea)
@@ -38,20 +37,44 @@
    (displayln (list conversion 'gr ingrediente)))
  receta)
 
+(newline)
 (displayln "-----")
-
+(newline)
+;temperatura
 (define instrucciones (parse-recipe-instructions "/Users/victorvalero/Desktop/code📂/evidencia02/data/Best Homemade Brownies-1.txt"))
 (for-each
  (lambda (linea)
    (displayln (convertir-temperaturas linea)))
  instrucciones)
 
+(newline)
+(displayln "-----")
+(newline)
+;calorias totales
+(define porciones (parse-recipe-porciones "/Users/victorvalero/Desktop/code📂/evidencia02/data/Lemon Cake-1.txt"))
+(displayln porciones)
+
+;(displayln (calorias-totales receta))
+;(displayln (calorias-por-porcion receta))
+
+;; Mostrar calorías totales
+(define total-calorias (calorias-totales receta))
+(displayln (string-append "Calorías totales: " (number->string total-calorias)))
+
+;; Mostrar calorías por porción
+(define calorias-porcion (calorias-por-porcion receta porciones))
+(displayln (string-append "Calorías por porción (" (number->string porciones) "): " (number->string calorias-porcion)))
+
+(newline)
+(displayln "Calorías por ingrediente:")
+(for-each
+ (lambda (linea)
+   (define-values (cantidad unidad ingrediente) (apply values linea))
+   (define nombre (string-join ingrediente " "))
+   (define gramos (t->gr cantidad unidad ingrediente))
+   (define calorias100g (hash-ref listaCaloriasItem nombre 0))
+   (define calorias (CaloriasIngrediente calorias100g gramos))
+   (displayln (list nombre calorias)))
+ receta)
 
 
-;(displayln(parsear-cantidad "2 3/4 cups sugar"))
-;(displayln(parsear-unidad "2 3/4 cups sugar"))
-;(displayln(parsear-ingrediente "2 3/4 cups granulated sugar"))
-;(displayln(linea-completa "2 3/4 cups granulated sugar"))
-
-;; Define solo-instrucciones or require it from another file
-;; Example definition (replace with actual data as needed):

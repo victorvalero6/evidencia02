@@ -12,6 +12,7 @@
 (provide parsear-ingrediente)
 (provide linea-completa)
 (provide convertir-temperaturas)
+(provide parse-recipe-porciones)
 
 
 
@@ -28,8 +29,8 @@
     [(pred (car lst)) (cons (car lst) (takef pred (cdr lst)))]
     [else '()]))
 
-(define (parse-recipe archivo)
-  (define in (open-input-file archivo))
+(define (parse-recipe archivo0)
+  (define in (open-input-file archivo0))
   (define lineas (sequence->list (in-lines in)))
   (close-input-port in)
 
@@ -162,3 +163,27 @@
 
       ;; Si no hay coincidencia, simplemente regresamos el texto original
       texto))
+
+;;------Porciones READ
+(define (parse-recipe-porciones archivo)
+  (define in (open-input-file archivo))
+  (define lineas (sequence->list (in-lines in)))
+  (close-input-port in)
+
+  (define posibles-lineas
+    (dropf (lambda (l)
+             (not (regexp-match? #px"(?i:^serv(e|ing)s?[[:space:]]*-[[:space:]]*[0-9]+)" l)))
+           lineas))
+
+  (if (null? posibles-lineas)
+      (error "No se encontró la línea de porciones")
+      (let* ([linea (first posibles-lineas)]
+             [partes (string-split linea "-")]
+             [num-str (string-trim (second partes))]
+             [numPorciones (string->number num-str)])
+        (if numPorciones
+            numPorciones
+            (error "No se pudo convertir el número de porciones")))))
+
+
+

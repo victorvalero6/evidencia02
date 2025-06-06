@@ -3,7 +3,7 @@
 (require "parser.rkt")
 
 ;; Rutas
-(define ruta-receta "data/Best Homemade Brownies-1.txt")
+(define ruta-receta "data/Pan-Seared Steak with Garlic Butter.txt")
 (define opciones (make-hash (parser-optionstxt "/Users/victorvalero/Desktop/code📂/evidencia02/options.txt")))
 
 ;; Leer opciones

@@ -1,4 +1,4 @@
 sistema: Metric
 temp: F
 porciones: 3
-filtra: cocoa
+filtra: all

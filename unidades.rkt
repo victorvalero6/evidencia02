@@ -39,6 +39,7 @@
    "dark chocolate chips" 170
    "sea salt" 288
    "large egg" 50
+   "eggs" 200
    "canola oil" 220
    "water" 240
    "vanilla" 13

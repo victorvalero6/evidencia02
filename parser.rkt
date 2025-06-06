@@ -14,6 +14,7 @@
 (provide convertir-temperaturas)
 (provide parse-recipe-porciones)
 (provide parser-optionstxt)
+(provide second-to-last)
 
 
 
@@ -125,15 +126,53 @@
      (list-tail tokens 2)]
 
     [else
-     (error "No hay suficientes elementos o formato no reconocido en la línea" linea)]))
+     linea]))
+
+;Casos especiales Grated zest of 1 lemon
+
+(define (second-to-last lst)
+  (if (< (length lst) 2)
+      (error "List too short for second-to-last")
+      (list-ref lst (- (length lst) 2))))
+
+(define (parsear-linea linea)
+  (define tokens (string-split linea))
+  (cond
+
+    [(and (= (length tokens) 2)
+          (regexp-match? #rx"^[0-9]+$" (first tokens)))
+     (list (string->number (first tokens))
+           "unit"
+           (list (second tokens)))]
+
+    ;Powdered sugar, for dusting
+    [(and (>= (length tokens) 3)
+          (string=? (last tokens) "dusting")
+          (string=? (second-to-last tokens) "for"))
+     (list 1 "unit" (list (string-join (drop-right tokens 2) " ") "for dusting"))]
+
+    [(and (>= (length tokens) 4)
+          (string=? (first tokens) "Grated")
+          (string=? (second tokens) "zest")
+          (string=? (third tokens) "of"))
+     (list 1 "unit" (list "lemon zest"))]
+
+    [(and (>= (length tokens) 2)
+          (string=? (string-join (take-right tokens 2)) "to taste"))
+     (list 1 "unit" (list (string-join (drop-right tokens 2) " ") "to taste"))]
+
+    [else
+     (list (parsear-cantidad linea)
+           (parsear-unidad linea)
+           (parsear-ingrediente linea))]))
+
 
 ;;------[LINEA COMPLETA]
-(define(linea-completa linea)
-  (define tokens(string-split linea))
-  (define cantidad(parsear-cantidad linea))
-  (define unidad(parsear-unidad linea))
-  (define ingredientes(parsear-ingrediente linea))
-  (list cantidad unidad ingredientes))
+(define (linea-completa linea)
+  (cond
+    [(string-blank? linea) '()]
+
+    [else (parsear-linea linea)]))
 
 ;----INSTRUCCIONES READ
 

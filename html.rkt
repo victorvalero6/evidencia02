@@ -1,35 +1,46 @@
 #lang racket
 (provide generar-html)
 
+;; Leer el contenido original de la receta
 (define (leer-archivo-como-texto ruta)
   (define in (open-input-file ruta))
   (define contenido (port->string in))
   (close-input-port in)
   contenido)
 
+;; Mostrar línea de ingredientes sin paréntesis
+(define (imprimir-ingrediente-html salida linea)
+  (define cantidad (first linea))
+  (define unidad (second linea))
+  (define ingrediente (string-join (third linea) " "))
+  (fprintf salida "<li>~a ~a ~a</li>\n" cantidad unidad ingrediente))
+
+;; Generar HTML final
 (define (generar-html ruta-receta nombre-html lista-transformada instrucciones)
   (define original (leer-archivo-como-texto ruta-receta))
   (define salida (open-output-file nombre-html #:exists 'replace))
 
-  (fprintf salida "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='UTF-8'>\n<title>Receta</title>\n<link rel='stylesheet' href='style.css'>\n</head>\n<body>\n")
+  ;; Encabezado del HTML
+  (fprintf salida "<!DOCTYPE html>\n<html>\n<head>\n<meta charset='UTF-8'>\n")
+  (fprintf salida "<title>Receta</title>\n")
+  (fprintf salida "<link rel='stylesheet' href='style.css'>\n")
+  (fprintf salida "</head>\n<body>\n")
 
-  ;receta original
-  (fprintf salida "<h2>Ingredientes Transdormados: <h2>\n<ul>\n")
+
+  ;; Ingredientes transformados
+  (fprintf salida "<h2>Ingredientes Transformados</h2>\n<ul>\n")
   (for-each
    (lambda (linea)
-     (fprintf salida "<li>~a</li>\n" (format "~a" linea)))
-   lista-transformada)
+     (imprimir-ingrediente-html salida linea)) lista-transformada)
   (fprintf salida "</ul>\n")
 
-  (fprintf salida "<h2>Instrucciones: <h2>")
+  ;; Instrucciones
+  (fprintf salida "<h2>Instrucciones</h2>\n")
   (for-each
    (lambda (linea)
-     (fprintf salida "<h3>~a</h3>\n" (format "~a" linea)))
+     (fprintf salida "<p>~a</p>\n" linea))
    instrucciones)
-  (fprintf salida "<h3>\n")
 
-  (fprintf salida "<h2>Instrucciones: <h2>")
-
-
-  ;salida
+  ;; Cierre
+  (fprintf salida "</body>\n</html>")
   (close-output-port salida))

@@ -46,7 +46,9 @@
       (displayln (list gramos 'gr nombre))]
     [else
      (define tazas (gr->t cantidad unidad ingrediente))
-     (for-each displayln (list tazas 'cups nombre))]))
+     (displayln (list tazas 'cups nombre))]))
+
+  
 receta-escalada)
 
 ;Mostrar instrucciones con temperatura convertida si aplica

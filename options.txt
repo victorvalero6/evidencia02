@@ -1,4 +1,4 @@
-sistema: Metric
-temp: F
-porciones: 3
+sistema: cup
+temp: C
+porciones: 1
 filtra: all

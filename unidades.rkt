@@ -80,9 +80,9 @@
   (define gramos-por-taza (hash-ref listaValorItems nombre #f))
   (cond
     ;cup cups
+
     [(and gramos-por-taza (or (string-ci=? unidad "cup")(string-ci=? unidad "cups")))
      (/ cantidad gramos-por-taza)]
-
 
     ;1 taza= 16 tablespoon
     [(and gramos-por-taza(or (string-ci=? unidad "tablespoon")(string-ci=? unidad "tablespoons")))

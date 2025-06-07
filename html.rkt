@@ -16,7 +16,7 @@
   (fprintf salida "<li>~a ~a ~a</li>\n" cantidad unidad nombre))
 
 ;; Generar HTML final
-(define (generar-html ruta-receta nombre-html receta-final instrucciones)
+(define (generar-html ruta-receta nombre-html receta-final instrucciones extra)
   (define original (leer-archivo-como-texto ruta-receta))
   (define salida (open-output-file nombre-html #:exists 'replace))
 
@@ -29,6 +29,15 @@
   ;; Nombre de la receta
   (fprintf salida "<h1>~a</h1>\n"
            (string-replace (last (string-split ruta-receta "/")) ".txt" ""))
+
+
+  ;; Extra
+  (fprintf salida "<h2>Info: </h2>\n")
+  (for-each
+   (lambda (extra)
+     (fprintf salida "<p>~a</p>\n"extra ))
+   extra)
+
 
   ;; Ingredientes transformados
   (fprintf salida "<h2>Ingredientes</h2>\n<ul>\n")
@@ -49,6 +58,7 @@
    (lambda (linea)
      (fprintf salida "<p>~a</p>\n" linea))
    instrucciones)
+
 
   ;; Cierre
   (fprintf salida "</body>\n</html>")

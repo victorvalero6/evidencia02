@@ -15,6 +15,7 @@
 (provide parse-recipe-porciones)
 (provide parser-optionstxt)
 (provide second-to-last)
+(provide parse-recipe-extra)
 
 
 
@@ -238,5 +239,17 @@
        lines))
 
 ;;TODO ANTES DE INGREDIENTES
+
+;----INSTRUCCIONES READ
+
+(define (parse-recipe-extra archivo4)
+  (define in (open-input-file archivo4))
+  (define lineas (sequence->list (in-lines in)))
+  (close-input-port in)
+
+  (define info-extra
+    (cdr(takef (lambda (l) (not (or(string=? l "Ingredients:")))) lineas)))
+
+  info-extra)
 
 

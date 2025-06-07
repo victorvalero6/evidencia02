@@ -1,21 +1,64 @@
-body{
-    background-color: rgb(91, 217, 255);
+/* Fondo general y fuente principal */
+body {
+    background-color: #5bf4ff;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    margin: 30px;
-    line-height: 45px;
-    text-shadow: 1px 1px 20px black;
-
+    margin: 40px;
+    line-height: 1.8;
+    color: rgb(0, 0, 0);
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
 }
 
-li{
-    line-height: 30px;
-}
-h1{
-    color: white;
-    font-weight: bolder;
+/* Títulos principales */
+h1 {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
-h2,h3{
-    color: white;
-    font-weight: lighter;
+/* Subtítulos */
+h2 {
+    font-size: 2em;
+    font-weight: 600;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    color: #000000;
+    border-bottom: 2px solid white;
+}
+
+h3 {
+    font-size: 1.4em;
+    font-weight: normal;
+    margin: 10px 0;
+    color: #f0f0f0;
+}
+
+/* Listado de ingredientes */
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    line-height: 1.6;
+    list-style-type: square;
+    color: black;
+}
+
+/* Instrucciones */
+p {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    color: black;
+}
+
+/* Bloque original */
+pre {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-left: 4px solid white;
+    overflow-x: auto;
+    font-size: 1em;
+    line-height: 1.5;
 }

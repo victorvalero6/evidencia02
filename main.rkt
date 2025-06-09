@@ -2,13 +2,11 @@
 (require "unidades.rkt")
 (require "parser.rkt")
 
+(define inicio(current-inexact-milliseconds))
 
 (define lista-recetas
-  (list
-   "data/Lemon Cake-1.txt"
-   "data/Best Homemade Brownies-1.txt"
-   "data/Chimichurri Sauce.txt"
-   "data/Pan-Seared Steak with Garlic Butter.txt"))
+  (for/list ([i (in-range 1 101)])
+    (string-append "data/Receta" (number->string i) ".txt")))
 
 (define opciones (make-hash (parser-optionstxt "/Users/victorvalero/Desktop/code📂/evidencia02/options.txt")))
 (define escala (string->number (hash-ref opciones "porciones" "1")))
@@ -92,6 +90,13 @@
      (fprintf salida "<h3>Calorías totales: ~a</h3>\n" total)
      (fprintf salida "<h3>Calorías por porción (~a): ~a</h3>\n" porciones por-porcion)))
  lista-recetas)
+
+(define fin(current-inexact-milliseconds))
+(define duracion-total-secuencial(- fin inicio))
+(displayln(string-append "Duracion total secuencial (ms): " (number->string duracion-total-secuencial)))
+
+
+
 
 ;; Cierre del HTML
 (fprintf salida "</body>\n</html>")

@@ -4,9 +4,22 @@
 
 (define inicioSecuencial(current-inexact-milliseconds))
 
+;Para utilizar las 5 recetas originales, utilice esta lista:
+;vvv
 (define lista-recetas
-  (for/list ([i (in-range 1 101)])
-    (string-append "data/Receta" (number->string i) ".txt")))
+  (list
+   "data/Best Homemade Brownies-1.txt"
+   "data/Chimichurri Sauce.txt"
+   "data/Fettuccine Alfredo.txt"
+   "data/Lemon Cake-1.txt"
+   "data/Pan-Seared Steak with Garlic Butter.txt"))
+
+;Para hacer la lectura de las 100 recetas, favor de clonar el repositorio de github para tener las
+;100 recetas, despues descomentarla.  vvvv
+
+;(define lista-recetas
+;  (for/list ([i (in-range 1 101)])
+;    (string-append "data/Receta" (number->string i) ".txt")))
 
 (define opciones (make-hash (parser-optionstxt "/Users/victorvalero/Desktop/code📂/evidencia02/options.txt")))
 (define escala (string->number (hash-ref opciones "porciones" "1")))

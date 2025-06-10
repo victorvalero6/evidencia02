@@ -1,4 +1,4 @@
-Duración secuencial (ms): 28.77392578125
-Duración paralela (ms): 21.697021484375
-Speedup: 1.3261693915900574
-Eficiencia: 0.013261693915900574
+Duración secuencial (ms): 22.956787109375
+Duración paralela (ms): 24.76806640625
+Speedup: 0.9268703794972893
+Eficiencia: 0.009268703794972893

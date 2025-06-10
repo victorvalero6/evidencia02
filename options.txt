@@ -1,4 +1,4 @@
 sistema: cups
 temp: C
 porciones: 3
-filtra: flour
+filtra: all

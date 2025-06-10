@@ -1,4 +1,4 @@
-sistema: cup
-temp: c
-porciones: 2
-filtra: all
+sistema: cups
+temp: C
+porciones: 3
+filtra: flour
